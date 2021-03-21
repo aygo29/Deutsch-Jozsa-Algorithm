@@ -1,0 +1,23 @@
+from qiskit import *
+qc = QuantumCircuit(5, 4)
+qc.x(4)
+for i in range(5):
+    qc.h(i)
+qc.barrier()
+qc.cx(0, 4)
+qc.cx(1, 4)
+qc.cx(2, 4)
+qc.cx(3, 4)
+qc.barrier()
+for i in range(4):
+    qc.h(i)
+qc.barrier()
+for i in range(4):
+    qc.measure(i, i)
+qc.draw('mpl')
+backend = Aer.get_backend('qasm_simulator')
+job = execute(qc, backend)
+result = job.result()
+counts = result.get_counts(qc)
+graph = visualization.plot_histogram(counts)
+display(graph)
